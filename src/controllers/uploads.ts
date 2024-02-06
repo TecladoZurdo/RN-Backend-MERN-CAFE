@@ -1,15 +1,17 @@
-const path = require("path");
-const fs = require("fs");
+import { Request, response } from "express";
+import subirArchivo from "../helpers/subir-archivo";
+import Usuario from "../models/usuario";
+import Producto from "../models/producto";
+import path from "path";
+import fs from "fs";
+
 
 const cloudinary = require("cloudinary").v2;
 cloudinary.config(process.env.CLOUDINARY_URL);
 
-const { response } = require("express");
-const { subirArchivo } = require("../helpers");
 
-const { Usuario, Producto } = require("../models");
 
-const cargarArchivo = async (req, res = response) => {
+const cargarArchivo = async (req: any, res = response) => {
   try {
     // txt, md
     // const nombre = await subirArchivo( req.files, ['txt','md'], 'textos' );
@@ -20,10 +22,10 @@ const cargarArchivo = async (req, res = response) => {
   }
 };
 
-const actualizarImagen = async (req, res = response) => {
+const actualizarImagen = async (req: any, res = response) => {
   const { id, coleccion } = req.params;
 
-  let modelo;
+  let modelo: any;
 
   switch (coleccion) {
     case "usuarios":
@@ -72,7 +74,7 @@ const actualizarImagen = async (req, res = response) => {
   res.json(modelo);
 };
 
-const actualizarImagenCloudinary = async (req, res = response) => {
+const actualizarImagenCloudinary = async (req: any, res = response) => {
   const { id, coleccion } = req.params;
 
   let modelo;
@@ -119,7 +121,7 @@ const actualizarImagenCloudinary = async (req, res = response) => {
   res.json(modelo);
 };
 
-const mostrarImagen = async (req, res = response) => {
+const mostrarImagen = async (req: Request, res = response) => {
   const { id, coleccion } = req.params;
 
   let modelo;
@@ -167,7 +169,7 @@ const mostrarImagen = async (req, res = response) => {
   res.sendFile(pathImagen);
 };
 
-module.exports = {
+export {
   cargarArchivo,
   actualizarImagen,
   mostrarImagen,

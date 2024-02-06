@@ -3,6 +3,9 @@ import dbConnection from "../database/config";
 import authRoutes from '../routes/auth';
 import buscarRoutes from "../routes/buscar";
 import categoriasRoutes from "../routes/categorias";
+import productosRoutes from "../routes/productos";
+import usuariosRoutes from "../routes/usuarios";
+import uploadsRoutes from "../routes/uploads";
 import cors from 'cors';
 const fileUpload = require("express-fileupload");
 
@@ -62,9 +65,9 @@ class Server {
     this.app.use(this.paths.auth, authRoutes);
     this.app.use(this.paths.buscar, buscarRoutes);
     this.app.use(this.paths.categorias, categoriasRoutes);
-    // this.app.use(this.paths.productos, require("../routes/productos"));
-    // this.app.use(this.paths.usuarios, require("../routes/usuarios"));
-    // this.app.use(this.paths.uploads, require("../routes/uploads"));
+    this.app.use(this.paths.productos, productosRoutes);
+    this.app.use(this.paths.usuarios, usuariosRoutes);
+    this.app.use(this.paths.uploads, uploadsRoutes);
   }
 
   listen() {

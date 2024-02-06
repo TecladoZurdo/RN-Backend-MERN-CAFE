@@ -1,8 +1,10 @@
 import { Request, response } from "express";
+import Usuario from "../models/usuario";
+import Categoria from "../models/categoria";
+import Producto from "../models/producto";
 
 const { ObjectId } = require('mongoose').Types;
 
-const { Usuario, Categoria, Producto } = require('../models');
 
 const coleccionesPermitidas = [
     'usuarios',

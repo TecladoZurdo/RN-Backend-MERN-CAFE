@@ -1,13 +1,10 @@
 import { Request, Response } from "express";
 
-const bcryptjs = require('bcryptjs');
-const { response, request } = require('express');
+import bcryptjs from 'bcryptjs';
+import { response, request } from 'express';
 
-const Usuario = require('../models/usuario');
-const { generarJWT } = require('../helpers');
-
-
-
+import Usuario from '../models/usuario';
+import generarJWT from "../helpers/generar-jwt";
 
 
 const usuariosGet = async (req: Request = request, res: Response = response): Promise<void> => {
@@ -83,7 +80,7 @@ const usuariosDelete = async (req: Request, res = response) => {
 
 
 
-module.exports = {
+export {
     usuariosGet,
     usuariosPost,
     usuariosPut,

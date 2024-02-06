@@ -8,10 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const usuario_1 = __importDefault(require("../models/usuario"));
+const categoria_1 = __importDefault(require("../models/categoria"));
+const producto_1 = __importDefault(require("../models/producto"));
 const { ObjectId } = require('mongoose').Types;
-const { Usuario, Categoria, Producto } = require('../models');
 const coleccionesPermitidas = [
     'usuarios',
     'categorias',
@@ -21,13 +26,13 @@ const coleccionesPermitidas = [
 const buscarUsuarios = (termino = '', res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
     const esMongoID = ObjectId.isValid(termino); // TRUE 
     if (esMongoID) {
-        const usuario = yield Usuario.findById(termino);
+        const usuario = yield usuario_1.default.findById(termino);
         return res.json({
             results: (usuario) ? [usuario] : []
         });
     }
     const regex = new RegExp(termino, 'i');
-    const usuarios = yield Usuario.find({
+    const usuarios = yield usuario_1.default.find({
         $or: [{ nombre: regex }, { correo: regex }],
         $and: [{ estado: true }]
     });
@@ -38,13 +43,13 @@ const buscarUsuarios = (termino = '', res = express_1.response) => __awaiter(voi
 const buscarCategorias = (termino = '', res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
     const esMongoID = ObjectId.isValid(termino); // TRUE 
     if (esMongoID) {
-        const categoria = yield Categoria.findById(termino);
+        const categoria = yield categoria_1.default.findById(termino);
         return res.json({
             results: (categoria) ? [categoria] : []
         });
     }
     const regex = new RegExp(termino, 'i');
-    const categorias = yield Categoria.find({ nombre: regex, estado: true });
+    const categorias = yield categoria_1.default.find({ nombre: regex, estado: true });
     res.json({
         results: categorias
     });
@@ -52,14 +57,14 @@ const buscarCategorias = (termino = '', res = express_1.response) => __awaiter(v
 const buscarProductos = (termino = '', res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
     const esMongoID = ObjectId.isValid(termino); // TRUE 
     if (esMongoID) {
-        const producto = yield Producto.findById(termino)
+        const producto = yield producto_1.default.findById(termino)
             .populate('categoria', 'nombre');
         return res.json({
             results: (producto) ? [producto] : []
         });
     }
     const regex = new RegExp(termino, 'i');
-    const productos = yield Producto.find({ nombre: regex, estado: true })
+    const productos = yield producto_1.default.find({ nombre: regex, estado: true })
         .populate('categoria', 'nombre');
     res.json({
         results: productos

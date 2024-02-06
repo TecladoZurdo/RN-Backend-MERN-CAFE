@@ -1,6 +1,6 @@
 import { Router } from "express";
+import buscar from "../controllers/buscar";
 
-const { buscar } = require('../controllers/buscar');
 
 const router = Router();
 

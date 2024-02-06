@@ -19,17 +19,21 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const bcryptjs = require('bcryptjs');
-const { response, request } = require('express');
-const Usuario = require('../models/usuario');
-const { generarJWT } = require('../helpers');
-const usuariosGet = (req = request, res = response) => __awaiter(void 0, void 0, void 0, function* () {
+exports.usuariosDelete = exports.usuariosPatch = exports.usuariosPut = exports.usuariosPost = exports.usuariosGet = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const express_1 = require("express");
+const usuario_1 = __importDefault(require("../models/usuario"));
+const generar_jwt_1 = __importDefault(require("../helpers/generar-jwt"));
+const usuariosGet = (req = express_1.request, res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
     const { limite = 5, desde = 0 } = req.query;
     const query = { estado: true };
     const [total, usuarios] = yield Promise.all([
-        Usuario.countDocuments(query),
-        Usuario.find(query)
+        usuario_1.default.countDocuments(query),
+        usuario_1.default.find(query)
             .skip(Number(desde))
             .limit(Number(limite))
     ]);
@@ -38,47 +42,45 @@ const usuariosGet = (req = request, res = response) => __awaiter(void 0, void 0,
         usuarios
     });
 });
-const usuariosPost = (req, res = response) => __awaiter(void 0, void 0, void 0, function* () {
+exports.usuariosGet = usuariosGet;
+const usuariosPost = (req, res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
     const { nombre, correo, password, rol } = req.body;
-    const usuario = new Usuario({ nombre, correo, password, rol });
+    const usuario = new usuario_1.default({ nombre, correo, password, rol });
     // Encriptar la contraseña
-    const salt = bcryptjs.genSaltSync();
-    usuario.password = bcryptjs.hashSync(password, salt);
+    const salt = bcryptjs_1.default.genSaltSync();
+    usuario.password = bcryptjs_1.default.hashSync(password, salt);
     // Guardar en BD
     yield usuario.save();
     // Generar el JWT
-    const token = yield generarJWT(usuario.id);
+    const token = yield (0, generar_jwt_1.default)(usuario.id);
     res.json({
         usuario,
         token
     });
 });
-const usuariosPut = (req, res = response) => __awaiter(void 0, void 0, void 0, function* () {
+exports.usuariosPost = usuariosPost;
+const usuariosPut = (req, res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const _a = req.body, { _id, password, google, correo } = _a, resto = __rest(_a, ["_id", "password", "google", "correo"]);
     if (password) {
         // Encriptar la contraseña
-        const salt = bcryptjs.genSaltSync();
-        resto.password = bcryptjs.hashSync(password, salt);
+        const salt = bcryptjs_1.default.genSaltSync();
+        resto.password = bcryptjs_1.default.hashSync(password, salt);
     }
-    const usuario = yield Usuario.findByIdAndUpdate(id, resto);
+    const usuario = yield usuario_1.default.findByIdAndUpdate(id, resto);
     res.json(usuario);
 });
-const usuariosPatch = (req, res = response) => {
+exports.usuariosPut = usuariosPut;
+const usuariosPatch = (req, res = express_1.response) => {
     res.json({
         msg: 'patch API - usuariosPatch'
     });
 };
-const usuariosDelete = (req, res = response) => __awaiter(void 0, void 0, void 0, function* () {
+exports.usuariosPatch = usuariosPatch;
+const usuariosDelete = (req, res = express_1.response) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const usuario = yield Usuario.findByIdAndUpdate(id, { estado: false });
+    const usuario = yield usuario_1.default.findByIdAndUpdate(id, { estado: false });
     res.json(usuario);
 });
-module.exports = {
-    usuariosGet,
-    usuariosPost,
-    usuariosPut,
-    usuariosPatch,
-    usuariosDelete,
-};
+exports.usuariosDelete = usuariosDelete;
 //# sourceMappingURL=usuarios.js.map

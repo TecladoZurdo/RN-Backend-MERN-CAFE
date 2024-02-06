@@ -17,6 +17,9 @@ const config_1 = __importDefault(require("../database/config"));
 const auth_1 = __importDefault(require("../routes/auth"));
 const buscar_1 = __importDefault(require("../routes/buscar"));
 const categorias_1 = __importDefault(require("../routes/categorias"));
+const productos_1 = __importDefault(require("../routes/productos"));
+const usuarios_1 = __importDefault(require("../routes/usuarios"));
+const uploads_1 = __importDefault(require("../routes/uploads"));
 const cors_1 = __importDefault(require("cors"));
 const fileUpload = require("express-fileupload");
 class Server {
@@ -61,9 +64,9 @@ class Server {
         this.app.use(this.paths.auth, auth_1.default);
         this.app.use(this.paths.buscar, buscar_1.default);
         this.app.use(this.paths.categorias, categorias_1.default);
-        // this.app.use(this.paths.productos, require("../routes/productos"));
-        // this.app.use(this.paths.usuarios, require("../routes/usuarios"));
-        // this.app.use(this.paths.uploads, require("../routes/uploads"));
+        this.app.use(this.paths.productos, productos_1.default);
+        this.app.use(this.paths.usuarios, usuarios_1.default);
+        this.app.use(this.paths.uploads, uploads_1.default);
     }
     listen() {
         this.app.listen(this.port, () => {
